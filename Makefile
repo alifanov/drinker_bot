@@ -3,3 +3,6 @@ install:
 
 freeze:
 	pip freeze > requirements.txt
+
+shell:
+	heroku run python manage.py shell

@@ -58,5 +58,5 @@ def start_handler(message):
     bot.send_message(message.chat.id, text=text, reply_markup=keyboard, parse_mode='HTML')
 
 
-def set_webhook():
-    bot.set_webhook(url='https://aef6909c7012.ngrok.io/' + settings.TOKEN)
+def set_webhook(url):
+    bot.set_webhook(url=url + settings.TOKEN)
