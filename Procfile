@@ -1,0 +1,1 @@
+web: gunicorn drinker_bot.wsgi
