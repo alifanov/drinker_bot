@@ -38,7 +38,7 @@ def callback_handler(call):
             key_ok = types.InlineKeyboardButton(text='Давай', callback_data=f'{user.tg_id}_ok')
             keyboard.add(key_ok)
 
-            bot.send_message(u.tg_id, text=f'@{user.username} ищет с кем бы бухнуть', reply_markup=keyboard)
+            bot.send_message(u.tg_id, text=f'@{user.username} ищет, с кем бы бухнуть', reply_markup=keyboard)
 
     if call.data.endswith('_ok'):
         requestor = BotUser.objects.get(tg_id=call.data.replace('_ok', ''))
