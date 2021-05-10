@@ -6,3 +6,6 @@ freeze:
 
 shell:
 	heroku run python manage.py shell
+
+migrate:
+	heroku run python manage.py migrate

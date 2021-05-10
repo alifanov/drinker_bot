@@ -21,8 +21,12 @@ def callback_handler(call):
     if call.data == 'drinking_now':
         user.is_open_for_requests = True
         user.save()
-
         bot.send_message(call.message.chat.id, text='Оке, буду присылать запросы на выпить :)', parse_mode='HTML')
+
+    if call.data == 'go_home':
+        user.is_open_for_requests = False
+        user.save()
+        bot.send_message(call.message.chat.id, text='Оке, больше не буду присылать запросы на выпить :)', parse_mode='HTML')
 
     if call.data == 'want_to_drink':
         open_users = BotUser.objects.filter(is_open_for_requests=True)
@@ -51,9 +55,11 @@ def start_handler(message):
     keyboard = types.InlineKeyboardMarkup()
     key_want_to_drink = types.InlineKeyboardButton(text='Хочу бухать', callback_data='want_to_drink')
     key_drinking_now = types.InlineKeyboardButton(text='Уже бухаю', callback_data='drinking_now')
+    key_go_home = types.InlineKeyboardButton(text='Иду домой', callback_data='go_home')
 
     keyboard.add(key_want_to_drink)
     keyboard.add(key_drinking_now)
+    keyboard.add(key_go_home)
 
     bot.send_message(message.chat.id, text=text, reply_markup=keyboard, parse_mode='HTML')
 
