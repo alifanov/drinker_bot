@@ -32,7 +32,7 @@ def callback_handler(call):
         open_users = BotUser.objects.filter(is_open_for_requests=True)
         for u in open_users:
             keyboard = types.InlineKeyboardMarkup()
-            key_ok = types.InlineKeyboardButton(text='Давай', callback_data=f'{u.tg_id}_ok')
+            key_ok = types.InlineKeyboardButton(text='Давай', callback_data=f'{user.tg_id}_ok')
             keyboard.add(key_ok)
 
             bot.send_message(u.tg_id, text=f'@{user.username} ищет с кем бы бухнуть', reply_markup=keyboard)
