@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.conf import settings
 
-from .models import BotUser
+from .models import BotUser, Match
 
 bot = TeleBot(settings.TOKEN)
 
@@ -26,7 +26,8 @@ def callback_handler(call):
     if call.data == 'go_home':
         user.is_open_for_requests = False
         user.save()
-        bot.send_message(call.message.chat.id, text='Оке, больше не буду присылать запросы на выпить :)', parse_mode='HTML')
+        bot.send_message(call.message.chat.id, text='Оке, больше не буду присылать запросы на выпить :)',
+                         parse_mode='HTML')
 
     if call.data == 'want_to_drink':
         user.is_open_for_requests = False
@@ -41,9 +42,24 @@ def callback_handler(call):
             bot.send_message(u.tg_id, text=f'@{user.username} ищет, с кем бы бухнуть', reply_markup=keyboard)
 
     if call.data.endswith('_ok'):
-        requestor = BotUser.objects.get(tg_id=call.data.replace('_ok', ''))
-        bot.send_message(requestor.tg_id, text=f'@{user.username} откликнулся на твой зов')
-        bot.send_message(user.tg_id, text='Ок, написал ему')
+        requester = BotUser.objects.get(tg_id=call.data.replace('_ok', ''))
+        bot.send_message(requester.tg_id, text=f'@{user.username} откликнулся на твой зов')
+
+        keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+        key_send_geo = types.KeyboardButton(text='Отправить местоположение', request_location=True)
+        keyboard.add(key_send_geo)
+
+        bot.send_message(user.tg_id, text='Отправь ему где ты сейчас', reply_markup=keyboard)
+        Match.objects.create(
+            requester_tg_id=requester.tg_id,
+            responder_tg_id=user.tg_id
+        )
+
+
+@bot.message_handler(content_types=['location'])
+def send_location_handler(message):
+    match = Match.objects.filter(responder_tg_id=message.from_user.id).last()
+    bot.send_location(match.requester_tg_id, message.location.latitude, message.location.longitude)
 
 
 @bot.message_handler(commands=['start'])
