@@ -49,7 +49,6 @@ def callback_handler(call):
         key_send_geo = types.KeyboardButton(text='Отправить местоположение', request_location=True)
         keyboard.add(key_send_geo)
 
-        # bot.send_message(user.tg_id, text='Ок, написал ему')
         bot.send_message(user.tg_id, text='Отправь ему где ты сейчас', reply_markup=keyboard)
         Match.objects.create(
             requester_tg_id=requester.tg_id,
