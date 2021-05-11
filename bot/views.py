@@ -30,8 +30,8 @@ def callback_handler(call):
                          parse_mode='HTML')
 
     if call.data == 'want_to_drink':
-        user.is_open_for_requests = False
-        user.save()
+        # user.is_open_for_requests = False
+        # user.save()
 
         open_users = BotUser.objects.filter(is_open_for_requests=True)
         for u in open_users:
