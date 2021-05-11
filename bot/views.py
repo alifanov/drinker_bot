@@ -30,8 +30,8 @@ def callback_handler(call):
                          parse_mode='HTML')
 
     if call.data == 'want_to_drink':
-        # user.is_open_for_requests = False
-        # user.save()
+        user.is_open_for_requests = False
+        user.save()
 
         open_users = BotUser.objects.filter(is_open_for_requests=True)
         for u in open_users:
@@ -45,16 +45,16 @@ def callback_handler(call):
         requester = BotUser.objects.get(tg_id=call.data.replace('_ok', ''))
         bot.send_message(requester.tg_id, text=f'@{user.username} откликнулся на твой зов')
 
-        keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+        keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True, one_time_keyboard=True)
         key_send_geo = types.KeyboardButton(text='Отправить местоположение', request_location=True)
         keyboard.add(key_send_geo)
 
-        bot.send_message(user.tg_id, text='Ок, написал ему')
-        # bot.send_message(user.tg_id, text='Отправь ему где ты сейчас', reply_markup=keyboard)
-        # Match.objects.create(
-        #     requester_tg_id=requester.tg_id,
-        #     responder_tg_id=user.tg_id
-        # )
+        # bot.send_message(user.tg_id, text='Ок, написал ему')
+        bot.send_message(user.tg_id, text='Отправь ему где ты сейчас', reply_markup=keyboard)
+        Match.objects.create(
+            requester_tg_id=requester.tg_id,
+            responder_tg_id=user.tg_id
+        )
 
 
 @bot.message_handler(content_types=['location'])
