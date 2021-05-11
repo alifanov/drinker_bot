@@ -43,6 +43,7 @@ def callback_handler(call):
     if call.data.endswith('_ok'):
         requestor = BotUser.objects.get(tg_id=call.data.replace('_ok', ''))
         bot.send_message(requestor.tg_id, text=f'@{user.username} откликнулся на твой зов')
+        bot.send_message(user.tg_id, text='Ок, написал ему')
 
 
 @bot.message_handler(commands=['start'])
