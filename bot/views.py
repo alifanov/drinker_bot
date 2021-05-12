@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.conf import settings
 
-from .models import BotUser, Match
+from .models import BotUser, Match, Log
 
 bot = TeleBot(settings.TOKEN)
 
@@ -11,6 +11,7 @@ bot = TeleBot(settings.TOKEN)
 class UpdateBotView(APIView):
     def post(self, request, token):
         update = types.Update.de_json(request.data)
+        Log.objects.create(data=request.data)
         bot.process_new_updates([update])
         return Response({'code': 200})
 

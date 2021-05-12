@@ -15,3 +15,8 @@ class Match(models.Model):
     requester_tg_id = models.PositiveIntegerField()
     responder_tg_id = models.PositiveIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+class Log(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    data = models.JSONField()
