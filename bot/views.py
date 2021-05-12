@@ -21,12 +21,12 @@ def callback_handler(call):
     if call.data == 'drinking_now':
         user.is_open_for_requests = True
         user.save()
-        bot.send_message(call.message.chat.id, text='Оке, буду присылать запросы на выпить :)', parse_mode='HTML')
+        bot.send_message(call.from_user.id, text='Оке, буду присылать запросы на выпить :)', parse_mode='HTML')
 
     if call.data == 'go_home':
         user.is_open_for_requests = False
         user.save()
-        bot.send_message(call.message.chat.id, text='Оке, больше не буду присылать запросы на выпить :)',
+        bot.send_message(call.from_user.id, text='Оке, больше не буду присылать запросы на выпить :)',
                          parse_mode='HTML')
 
     if call.data == 'want_to_drink':

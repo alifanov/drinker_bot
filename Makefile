@@ -9,3 +9,6 @@ shell:
 
 migrate:
 	heroku run python manage.py migrate
+
+createsuperuser:
+	heroku run python manage.py createsuperuser
