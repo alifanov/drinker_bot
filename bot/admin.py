@@ -5,4 +5,10 @@ from .models import BotUser, Match, Log
 # Register your models here.
 admin.site.register(BotUser)
 admin.site.register(Match)
-admin.site.register(Log)
+
+
+class LogAdmin(admin.ModelAdmin):
+    list_display = ('created_at',)
+
+
+admin.site.register(Log, LogAdmin)
