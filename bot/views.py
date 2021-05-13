@@ -23,7 +23,7 @@ def callback_handler(call: types.CallbackQuery):
     if call.data == 'drinking_now':
         user.open_for_requests_until = now() + timedelta(hours=2)
         user.save()
-        bot.send_message(call.from_user.id, text='Оке, буду присылать запросы на выпить :)', parse_mode='HTML')
+        bot.send_message(call.from_user.id, text='Оке, буду присылать запросы на выпить в ближайшие пару часов :)', parse_mode='HTML')
 
     if call.data == 'go_home':
         user.open_for_requests_until = None
