@@ -17,9 +17,9 @@ class UpdateBotView(APIView):
 
 
 @bot.callback_query_handler(func=lambda call: True)
-def callback_handler(call):
+def callback_handler(call: types.CallbackQuery):
     user, _ = BotUser.objects.get_or_create(tg_id=call.from_user.id)
-    call.answer()
+    bot.answer_callback_query(call.id)
     if call.data == 'drinking_now':
         user.open_for_requests_until = now() + timedelta(hours=2)
         user.save()
