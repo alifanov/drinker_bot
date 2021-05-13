@@ -4,7 +4,8 @@ from django.db import models
 # Create your models here.
 class BotUser(models.Model):
     tg_id = models.CharField(max_length=256)
-    is_open_for_requests = models.BooleanField(default=False)
+    # is_open_for_requests = models.BooleanField(default=False)
+    open_for_requests_until = models.DateTimeField(null=True, blank=True)
 
     first_name = models.CharField(max_length=256, blank=True, null=True)
     last_name = models.CharField(max_length=256, blank=True, null=True)

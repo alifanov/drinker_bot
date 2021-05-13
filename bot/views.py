@@ -2,7 +2,7 @@ from telebot import TeleBot, types
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.conf import settings
-
+from django.utils.timezone import now, timedelta
 from .models import BotUser, Match, Log
 
 bot = TeleBot(settings.TOKEN)
@@ -19,22 +19,23 @@ class UpdateBotView(APIView):
 @bot.callback_query_handler(func=lambda call: True)
 def callback_handler(call):
     user, _ = BotUser.objects.get_or_create(tg_id=call.from_user.id)
+    call.answer()
     if call.data == 'drinking_now':
-        user.is_open_for_requests = True
+        user.open_for_requests_until = now() + timedelta(hours=2)
         user.save()
         bot.send_message(call.from_user.id, text='Оке, буду присылать запросы на выпить :)', parse_mode='HTML')
 
     if call.data == 'go_home':
-        user.is_open_for_requests = False
+        user.open_for_requests_until = None
         user.save()
         bot.send_message(call.from_user.id, text='Оке, больше не буду присылать запросы на выпить :)',
                          parse_mode='HTML')
 
     if call.data == 'want_to_drink':
-        user.is_open_for_requests = False
+        user.open_for_requests_until = None
         user.save()
 
-        open_users = BotUser.objects.filter(is_open_for_requests=True)
+        open_users = BotUser.objects.filter(open_for_requests_until__gte=now())
         for u in open_users:
             keyboard = types.InlineKeyboardMarkup()
             key_ok = types.InlineKeyboardButton(text='Давай', callback_data=f'{user.tg_id}_ok')
@@ -72,8 +73,6 @@ def start_handler(message):
         'last_name': message.from_user.last_name,
         'username': message.from_user.username
     })
-    user.is_open_for_requests = False
-    user.save()
 
     keyboard = types.InlineKeyboardMarkup()
     key_want_to_drink = types.InlineKeyboardButton(text='Хочу бухать', callback_data='want_to_drink')
