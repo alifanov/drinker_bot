@@ -36,6 +36,11 @@ def callback_handler(call: types.CallbackQuery):
         user.save()
 
         open_users = BotUser.objects.filter(open_for_requests_until__gte=now())
+        if open_users.count() == 0:
+            bot.send_message(user.tg_id, text='Пока никто не бухает :( Можешь стать первым хостом %)')
+        else:
+            bot.send_message(user.tg_id, text=f'Ща спрошу у {open_users.count()} людей')
+
         for u in open_users:
             keyboard = types.InlineKeyboardMarkup()
             key_ok = types.InlineKeyboardButton(text='Давай', callback_data=f'{user.tg_id}_ok')
