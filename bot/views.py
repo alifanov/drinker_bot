@@ -46,17 +46,17 @@ def callback_handler(call: types.CallbackQuery):
             key_ok = types.InlineKeyboardButton(text='Давай', callback_data=f'{user.tg_id}_ok')
             keyboard.add(key_ok)
 
-            bot.send_message(u.tg_id, text=f'@{user.username} ищет, с кем бы бухнуть', reply_markup=keyboard)
+            bot.send_message(u.tg_id, text=f'@{user.get_username()} ищет, с кем бы бухнуть', reply_markup=keyboard)
 
     if call.data.endswith('_ok'):
         requester = BotUser.objects.get(tg_id=call.data.replace('_ok', ''))
-        bot.send_message(requester.tg_id, text=f'@{user.username} откликается на твой зов')
+        bot.send_message(requester.tg_id, text=f'@{user.get_username()} откликается на твой зов')
 
         keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True, one_time_keyboard=True)
         key_send_geo = types.KeyboardButton(text='Отправить местоположение', request_location=True)
         keyboard.add(key_send_geo)
 
-        bot.send_message(user.tg_id, text=f'Отправь @{requester.username}, где ты сейчас', reply_markup=keyboard)
+        bot.send_message(user.tg_id, text=f'Отправь @{requester.get_username()}, где ты сейчас', reply_markup=keyboard)
         Match.objects.create(
             requester_tg_id=requester.tg_id,
             responder_tg_id=user.tg_id

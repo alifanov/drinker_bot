@@ -11,6 +11,9 @@ class BotUser(models.Model):
     last_name = models.CharField(max_length=256, blank=True, null=True)
     username = models.CharField(max_length=256, blank=True, null=True)
 
+    def get_username(self):
+        return self.username if self.username else f'{self.first_name} {self.last_name}'
+
 
 class Match(models.Model):
     requester_tg_id = models.PositiveIntegerField()
