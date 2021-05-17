@@ -80,9 +80,9 @@ def start_handler(message):
     })
 
     keyboard = types.InlineKeyboardMarkup()
-    key_want_to_drink = types.InlineKeyboardButton(text='Хочу бухать', callback_data='want_to_drink')
-    key_drinking_now = types.InlineKeyboardButton(text='Уже бухаю', callback_data='drinking_now')
-    key_go_home = types.InlineKeyboardButton(text='Иду домой', callback_data='go_home')
+    key_want_to_drink = types.InlineKeyboardButton(text='Хочу бухать (отправить запрос)', callback_data='want_to_drink')
+    key_drinking_now = types.InlineKeyboardButton(text='Уже бухаю (стать хостом)', callback_data='drinking_now')
+    key_go_home = types.InlineKeyboardButton(text='Иду домой (перестать быть хостом)', callback_data='go_home')
 
     keyboard.add(key_want_to_drink)
     keyboard.add(key_drinking_now)
